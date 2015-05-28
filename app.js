@@ -78,6 +78,6 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-console.log('starting Express (NodeJS) Web server'); 
-app.listen(8080); 
-console.log('Webserverlistening on port 8080');
+
+app.listen(3000); 
+console.log('Waiting for you at 3000...');
