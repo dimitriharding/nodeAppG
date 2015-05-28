@@ -6,11 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // Database------------------------------------------------->
-var config = {       "USER"    : "",                  
-           "PASS"    : "",       
+var config = {       "USER"    : "Gav",                  
+           "PASS"    : "pass",       
            "HOST"    : "ec2-52-11-254-37.us-west-2.compute.amazonaws.com",         
            "PORT"    : "27017",        
-           "DATABASE" : "nodeDB"     };
+           "DATABASE" : "nodeApp"     };
 
 var dbPath  = "mongodb://"+config.USER + ":"+     config.PASS + "@"+     config.HOST + ":"+    config.PORT + "/"+     config.DATABASE; 
 
