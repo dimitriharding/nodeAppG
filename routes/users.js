@@ -20,7 +20,7 @@ router.get('/viewuser/:id', function(req, res) {
     //res.json(user);
     //var query = '{"_id" : ObjectId("5567580810256268299df7ea")}';
     db.collection('userlist').findOne({_id: ObjectID.createFromHexString(user)},function(err, result) {
-    if (err) res.send({msg: 'An error occured: '+err});
+    if (err) { res.send({msg: 'An error occured: '+err}) };
        res.json(result);
     });
 });

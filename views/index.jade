@@ -21,7 +21,7 @@ block content
                             br
                             span#userInfoLocation Location
                     div(class='card-action')
-                        a(href='#modalEdit' class='modal-trigger') Edit
+                        a(id="editbutton" class='' style='cursor: pointer') Edit
             // /USER INFO
 
             // USER LIST
@@ -37,14 +37,23 @@ block content
         h5 Add User
         #addUser
             fieldset
+                label(for="inputUserName") Username
                 input#inputUserName(type='text', placeholder='Username')
+                br
+                label(for="einputUserEmail") Email Address
                 input#inputUserEmail(type='text', placeholder='Email')
                 br
+                label(for="inputUserFullName") Full Name
                 input#inputUserFullname(type='text', placeholder='Full Name')
+                br
+                label(for="inputUserAge") Age
                 input#inputUserAge(type='text', placeholder='Age')
                 br
+                label(for="inputUserLocation") Location
                 input#inputUserLocation(type='text', placeholder='Location')
-                input#inputUserGender(type='text', placeholder='gender')
+                br
+                label(for="inputUserGender") Gender
+                input#inputUserGender(type='text', placeholder='Gender')
                 br
                 button#btnAddUser(class='btn green darken-1') Add User
         // /ADD USER
@@ -54,7 +63,27 @@ block content
     #modalEdit(class='modal')
         div(class='modal-content')
             h4 Edit User
-            p Edit feature not implemented yet.
+            #editUser
+            fieldset
+                label(for="editUserName") Username
+                input#editUserName(type='text')
+                br
+                label(for="editUserEmail") Email Address
+                input#editUserEmail(type='text')
+                br
+                label(for="editUserFullName") Full Name
+                input#editUserFullname(type='text')
+                br
+                label(for="editUserAge") Age
+                input#editUserAge(type='text')
+                br
+                label(for="editUserLocation") Location
+                input#editUserLocation(type='text')
+                br
+                label(for="editUserGender") Gender
+                input#editUserGender(type='text')
+                br
+                button#btnEditUser(class='btn green darken-1') Save
         div(class='modal-footer')
-            a(href='#!' class='modal-action modal-close waves-effect waves-green btn-flat') OK
+            a(href='#!' class='modal-action modal-close waves-effect waves-red btn-flat') Cancel
          

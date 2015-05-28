@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     // Populate the user table on initial page load
     populateTable();
-    
+
     $('.modal-trigger').leanModal();
 
 });
@@ -44,6 +44,38 @@ function populateTable() {
     // Delete User link click
     $('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
 
+    $('#editbutton').on('click', function(event){
+        //alert('Edit clicked');
+        if( $('div#userInfoName').text() === 'Name' ){
+            event.preventDefault();
+            Materialize.toast('Select A User First...', 4000)
+        }
+        else{
+            $('#modalEdit').openModal();
+                
+             // Prevent Link from Firing
+                event.preventDefault();
+
+                // Retrieve username from link rel attribute
+                var thisUserName = $(this).attr('rel');
+
+                // Get Index of object based on id value
+                var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName);
+
+                 // Get our User Object
+                var thisUserObject = userListData[arrayPosition];
+
+
+                //Populate Info Box
+                $('#editUserName').val(thisUserObject.username);
+                $('#editUserEmail').val(thisUserObject.email);
+                $('#editUserFullname').val(thisUserObject.fullname);
+                $('#editUserAge').val(thisUserObject.age);
+                $('#editUserGender').val(thisUserObject.gender);
+                $('#editUserLocation').val(thisUserObject.location);
+        }
+    });
+     //
 
     });
 };
@@ -62,6 +94,8 @@ function showUserInfo(event) {
 
      // Get our User Object
     var thisUserObject = userListData[arrayPosition];
+
+    $('a#editbutton').attr('rel', thisUserName);
 
     //Populate Info Box
     $('#userInfoName').text(thisUserObject.fullname);
