@@ -6,6 +6,8 @@ $(document).ready(function() {
 
     // Populate the user table on initial page load
     populateTable();
+    
+    $('.modal-trigger').leanModal();
 
 });
 

@@ -1,40 +1,40 @@
 extends layout
 
 block content
-    h3(style='text-align: center' class='green-text text-darken-1')= title
+    h2(style='text-align: center' class='green-text text-darken-1')= title
     p(style='text-align: center') Welcome to ExpressJS/NodeJS App
-
+    hr/
     // Wrapper
     #wrapper(class='container')
-        // USER INFO
-        #userInfo
-            h2 User Info
-            p
-                strong Name:
-                |  <span id='userInfoName'></span>
-                br
-                strong Age:
-                |  <span id='userInfoAge'></span>
-                br
-                strong Gender:
-                |  <span id='userInfoGender'></span>
-                br
-                strong Location:
-                |  <span id='userInfoLocation'></span>
-        // /USER INFO
+        #row(class='row')
+            // USER INFO
+            h5 User Info
+            #userInfo(class='col s6 m6 lg6')
+                div(class='card blue-grey darken-1')
+                    div(class='card-content white-text')
+                        #userInfoName(class='card-title') Name
+                            br
+                        p(style='text-align:center')
+                            span#userInfoAge Age
+                            br
+                            span#userInfoGender Gender
+                            br
+                            span#userInfoLocation Location
+                    div(class='card-action')
+                        a(href='#modalEdit' class='modal-trigger') Edit
+            // /USER INFO
 
-        // USER LIST
-        h4 User List
-        #userList
-            table(class='hoverable')
-                thead
-                    th UserName
-                    th Email
-                    th Delete
-                tbody
-        // /USER LIST
+            // USER LIST
+            #userList(class='col s6 m6 lg6')
+                table(class='hoverable')
+                    thead
+                        th UserName
+                        th Email
+                        th Delete
+                    tbody
+            // /USER LIST
         // ADD USER
-        h2 Add User
+        h5 Add User
         #addUser
             fieldset
                 input#inputUserName(type='text', placeholder='Username')
@@ -49,3 +49,12 @@ block content
                 button#btnAddUser(class='btn green darken-1') Add User
         // /ADD USER
     // /WRAPPER
+
+    // Modal Structure
+    #modalEdit(class='modal')
+        div(class='modal-content')
+            h4 Edit User
+            p Edit feature not implemented yet.
+        div(class='modal-footer')
+            a(href='#!' class='modal-action modal-close waves-effect waves-green btn-flat') OK
+         
