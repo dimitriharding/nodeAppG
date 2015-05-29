@@ -199,7 +199,7 @@ function deleteUser(event) {
         }).done(function( response, msg, status ) {
 
             // Check for a successful (blank) response
-           if (status.status == 201) {
+           if (status.status == 200) {
                  Materialize.toast('User Deleted...', 4000, 'green darken-2');
             }
             else {
