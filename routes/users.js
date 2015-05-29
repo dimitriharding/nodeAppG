@@ -10,17 +10,18 @@ var router = express.Router();
 router.get('/userlist', function(req, res) {
     var db = req.db;
     db.collection('userlist').find().toArray(function (err, items) {
+
         res.json(items);
     });
 });
 
-router.get('/viewuser/:id', function(req, res) {
+router.get('/viewuser', function(req, res) {
     var db = req.db;
-    var user = req.params.id;
+    var user = req.query.id;
     //res.json(user);
     //var query = '{"_id" : ObjectId("5567580810256268299df7ea")}';
     db.collection('userlist').findOne({_id: ObjectID.createFromHexString(user)},function(err, result) {
-    if (err) { res.send({msg: 'An error occured: '+err}) };
+    if (err) { res.status(400).send({msg: 'An error occured: '+err}) };
        res.json(result);
     });
 });
@@ -31,9 +32,14 @@ router.get('/viewuser/:id', function(req, res) {
 router.post('/adduser', function(req, res) {
     var db = req.db;
     db.collection('userlist').insert(req.body, function(err, result){
-        res.send(
-            (err === null) ? { msg: '' } : { msg: err }
-        );
+        
+        if(result){
+            res.status(201).json(result);
+        }
+        else{
+            res.status(400).send({msg : 'error' + err});
+        }
+
     });
 });
 

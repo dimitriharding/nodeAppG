@@ -3,7 +3,7 @@ var userListData = [];
 
 // DOM Ready =============================================================
 $(document).ready(function() {
-
+    //alert('hello');
     // Populate the user table on initial page load
     populateTable();
 
@@ -134,14 +134,17 @@ function addUser(event) {
             data: newUser,
             url: '/users/adduser',
             dataType: 'JSON'
-        }).done(function( response ) {
 
+        }).done(function( response, msg, status ) {
+            //alert('test');
             // Check for successful (blank) response
-            if (response.msg === '') {
+            //console.log(status.status);
+            if (status.status == 201) {
 
                 // Clear the form inputs
                 $('#addUser fieldset input').val('');
 
+                Materialize.toast('User Added...', 4000);
                 // Update the table
                 populateTable();
 
@@ -149,7 +152,14 @@ function addUser(event) {
             else {
 
                 // If something goes wrong, alert the error message that our service returned
-                alert('Error: ' + response.msg);
+               // alert('Error: ' + response.msg);
+
+                Materialize.toast('Error...'+response.msg, 4000);
+                //$('#addUser fieldset input').val('');
+
+
+                // Update the table
+                populateTable();
 
             }
         });
