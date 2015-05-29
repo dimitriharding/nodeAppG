@@ -7,34 +7,10 @@ $(document).ready(function() {
     // Populate the user table on initial page load
     populateTable();
 
+     $('ul.tabs').tabs();
+
     $('.modal-trigger').leanModal();
 
-});
-
-// Functions =============================================================
-
-// Fill table with data
-function populateTable() {
-
-    // Empty content string
-    var tableContent = '';
-
-    // jQuery AJAX call for JSON
-    $.getJSON( '/users/userlist', function( data ) {
-        // Stick our user data array into a userlist variable in the global object
-    userListData = data;
-        // For each item in our JSON, add a table row and cells to the content string
-        $.each(data, function(){
-            tableContent += '<tr>';
-            tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.username + '">' + this.username + '</a></td>';
-            tableContent += '<td>' + this.email + '</td>';
-            tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
-            tableContent += '</tr>';
-        });
-
-        // Inject the whole content string into our existing HTML table
-        $('#userList table tbody').html(tableContent);
-        // Username link click
     $('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 
 
@@ -43,6 +19,9 @@ function populateTable() {
 
     // Delete User link click
     $('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
+
+    //Save edit button
+    $('#btnEditUser').on('click', editUser);
 
     $('#editbutton').on('click', function(event){
         //alert('Edit clicked');
@@ -57,10 +36,10 @@ function populateTable() {
                 event.preventDefault();
 
                 // Retrieve username from link rel attribute
-                var thisUserName = $(this).attr('rel');
+                var thisId = $(this).attr('rel');
 
                 // Get Index of object based on id value
-                var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName);
+                var arrayPosition = userListData.map(function(arrayItem) { return arrayItem._id; }).indexOf(thisId);
 
                  // Get our User Object
                 var thisUserObject = userListData[arrayPosition];
@@ -75,7 +54,31 @@ function populateTable() {
                 $('#editUserLocation').val(thisUserObject.location);
         }
     });
-     //
+});
+
+// Functions =============================================================
+
+// Fill table with data
+function populateTable() {
+
+    // Empty content string
+    var tableContent = '';
+
+    // jQuery AJAX call for JSON
+    $.getJSON( '/users/userlist', function( data ) {
+        // Stick our user data array into a userlist variable in the global object
+    userListData = data.reverse();
+        // For each item in our JSON, add a table row and cells to the content string
+        $.each(data, function(){
+            tableContent += '<tr>';
+            tableContent += '<td><a href="#" class="linkshowuser" rel="' + this._id + '">' + this.username + '</a></td>';
+            tableContent += '<td>' + this.email + '</td>';
+            tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
+            tableContent += '</tr>';
+        });
+
+        // Inject the whole content string into our existing HTML table
+        $('#userList table tbody').html(tableContent);
 
     });
 };
@@ -87,15 +90,15 @@ function showUserInfo(event) {
     event.preventDefault();
 
     // Retrieve username from link rel attribute
-    var thisUserName = $(this).attr('rel');
+    var thisId = $(this).attr('rel');
 
     // Get Index of object based on id value
-    var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName);
+    var arrayPosition = userListData.map(function(arrayItem) { return arrayItem._id; }).indexOf(thisId);
 
      // Get our User Object
     var thisUserObject = userListData[arrayPosition];
 
-    $('a#editbutton').attr('rel', thisUserName);
+    $('a#editbutton').attr('rel', thisId);
 
     //Populate Info Box
     $('#userInfoName').text(thisUserObject.fullname);
@@ -144,7 +147,7 @@ function addUser(event) {
                 // Clear the form inputs
                 $('#addUser fieldset input').val('');
 
-                Materialize.toast('User Added...', 4000);
+                Materialize.toast('User Added...', 4000, 'green darken-2');
                 // Update the table
                 populateTable();
 
@@ -154,7 +157,7 @@ function addUser(event) {
                 // If something goes wrong, alert the error message that our service returned
                // alert('Error: ' + response.msg);
 
-                Materialize.toast('Error...'+response.msg, 4000);
+                Materialize.toast('Error...'+ response.msg, 4000, 'red darken-3');
                 //$('#addUser fieldset input').val('');
 
 
@@ -186,13 +189,14 @@ function deleteUser(event) {
         $.ajax({
             type: 'DELETE',
             url: '/users/deleteuser/' + $(this).attr('rel')
-        }).done(function( response ) {
+        }).done(function( response, msg, status ) {
 
             // Check for a successful (blank) response
-            if (response.msg === '') {
+           if (status.status == 201) {
+                 Materialize.toast('User Deleted...', 4000, 'green darken-2');
             }
             else {
-                alert('Error: ' + response.msg);
+                 Materialize.toast('Error...'+ response.msg, 4000, 'red darken-3');
             }
 
             // Update the table
@@ -210,3 +214,68 @@ function deleteUser(event) {
 
 };
 
+// Edit User
+function editUser(event) {
+
+    event.preventDefault();
+
+    // Pop up a confirmation dialog
+    var confirmation = confirm('Are you sure you want to edit this user?');
+
+    var id = $('a#editbutton').attr('rel');
+    console.log('id= ' + id);
+    // Check and make sure the user confirmed
+    if (confirmation === true) {
+
+        var user = {
+            'username': $('#editUserName').val(),
+            'email': $('#editUserEmail').val(),
+            'fullname': $('#editUserFullname').val(),
+            'age': $('#editUserAge').val(),
+            'location': $('#editUserLocation').val(),
+            'gender': $('#editUserGender').val()
+        }
+
+        // If they did, do our edit
+        $.ajax({
+            type: 'PUT',
+            data: user,
+            url: '/users/edituser/' + id
+        }).done(function( response, msg, status ) {
+
+            console.log(status);
+            // Check for a successful (blank) response
+            if (status.status == 200) {
+            
+                Materialize.toast('User Edited...', 4000, 'green darken-2');
+                
+                //Reset selection
+                $('#userInfoName').text('Name');
+                $('#userInfoAge').text('Age');
+                $('#userInfoGender').text('Gender');
+                $('#userInfoLocation').text('Location');
+
+
+                populateTable();
+                 $('#modalEdit').closeModal();
+                
+            }
+            else {
+                 Materialize.toast('Error...'+ response.msg, 4000, 'red darken-3');
+                
+            }
+
+            // Update the table
+            populateTable();
+
+        });
+
+    }
+    else {
+
+        // If they said no to the confirm, do nothing
+        return false;
+
+    }
+
+};

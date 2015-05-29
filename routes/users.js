@@ -43,6 +43,21 @@ router.post('/adduser', function(req, res) {
     });
 });
 
+router.put('/edituser/:id', function(req, res) {
+    var db = req.db;
+    var userToUpdate = req.params.id;
+    db.collection('userlist').update({_id: ObjectID(userToUpdate)}, req.body, function(err, result){
+    //console.log(result);
+        if(result){
+            res.status(200);
+            res.send();
+        }
+        else{
+            res.status(400).send({msg : 'error' + err});
+        }
+
+    });
+});
 /*
  * DELETE to deleteuser.
  */
@@ -50,7 +65,13 @@ router.delete('/deleteuser/:id', function(req, res) {
     var db = req.db;
     var userToDelete = req.params.id;
     db.collection('userlist').removeById(userToDelete, function(err, result) {
-        res.send((result === 1) ? { msg: '' } : { msg:'error: ' + err });
+
+        if(result === 1){
+            res.status(201).send('Successfully Deleted');
+        }
+        else{
+            res.status(400).send({msg : 'error' + err});
+        }
     });
 });
 
