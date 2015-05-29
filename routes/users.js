@@ -67,7 +67,7 @@ router.delete('/deleteuser', function(req, res) {
     db.collection('userlist').removeById(user, function(err, result) {
 
         if(result === 1){
-            res.status(201).send('Successfully Deleted');
+            res.status(200).send('Successfully Deleted');
         }
         else{
             res.status(400).send({msg : 'error' + err});
