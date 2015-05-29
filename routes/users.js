@@ -43,10 +43,10 @@ router.post('/adduser', function(req, res) {
     });
 });
 
-router.put('/edituser/:id', function(req, res) {
+router.put('/edituser', function(req, res) {
     var db = req.db;
-    var userToUpdate = req.params.id;
-    db.collection('userlist').update({_id: ObjectID(userToUpdate)}, req.body, function(err, result){
+    var user = req.query.id;
+    db.collection('userlist').update({_id: ObjectID(user)}, req.body, function(err, result){
     //console.log(result);
         if(result){
             res.status(200);
@@ -61,10 +61,10 @@ router.put('/edituser/:id', function(req, res) {
 /*
  * DELETE to deleteuser.
  */
-router.delete('/deleteuser/:id', function(req, res) {
+router.delete('/deleteuser', function(req, res) {
     var db = req.db;
-    var userToDelete = req.params.id;
-    db.collection('userlist').removeById(userToDelete, function(err, result) {
+    var user = req.query.id;
+    db.collection('userlist').removeById(user, function(err, result) {
 
         if(result === 1){
             res.status(201).send('Successfully Deleted');

@@ -54,6 +54,13 @@ $(document).ready(function() {
                 $('#editUserLocation').val(thisUserObject.location);
         }
     });
+
+ $('.fixed-action-btn').click(function () {
+          $("html, body").animate({
+              scrollTop: 0
+          }, 600);
+          return false;
+      });
 });
 
 // Functions =============================================================
@@ -188,7 +195,7 @@ function deleteUser(event) {
         // If they did, do our delete
         $.ajax({
             type: 'DELETE',
-            url: '/users/deleteuser/' + $(this).attr('rel')
+            url: '/users/deleteuser?id=' + $(this).attr('rel')
         }).done(function( response, msg, status ) {
 
             // Check for a successful (blank) response
@@ -240,7 +247,7 @@ function editUser(event) {
         $.ajax({
             type: 'PUT',
             data: user,
-            url: '/users/edituser/' + id
+            url: '/users/edituser?id=' + id
         }).done(function( response, msg, status ) {
 
             console.log(status);
