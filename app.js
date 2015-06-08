@@ -12,13 +12,20 @@ var app = express();
 
 
 // Database------------------------------------------------->
-var config = {       "USER"    : "Gav",                  
-           "PASS"    : "pass",       
-           "HOST"    : "52.11.254.37",         
-           "PORT"    : "27017",        
-           "DATABASE" : "nodeApp"     };
+var liveConfig = { "USER"    : "Gav",                  
+                   "PASS"    : "pass",       
+                   "HOST"    : "52.11.254.37",         
+                   "PORT"    : "27017",        
+                   "DATABASE" : "nodeApp"     };
 
-var dbPath  = "mongodb://"+config.USER + ":"+     config.PASS + "@"+     config.HOST + ":"+    config.PORT + "/"+     config.DATABASE; 
+var localConfig = { "USER" : "Gav",
+                    "PASS" : "pass",
+                    "HOST" : "localhost",
+                    "PORT" : "27017",
+                    "DATABASE" : "nodeApp"
+                };
+                
+var dbPath  = "mongodb://"+localConfig.USER + ":"+     localConfig.PASS + "@"+     localConfig.HOST + ":"+    localConfig.PORT + "/"+     localConfig.DATABASE; 
 
 
            

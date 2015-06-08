@@ -211,21 +211,9 @@ function signOut(event){
                     // Check for a successful (blank) response
                     if (status.status == 200) {
                         
-                        $.ajax({
-                            type: 'PUT',
-                            url: '/users/insertBlank/' + event.target.rel
-                        }).done(function( response, msg, status ) {
-                
-                            if (status.status == 200) {
-                        
-                                Materialize.toast('User Signed Out...at '+currentTime, 4000, 'green darken-2');
-                            
-                                populateTable();    
-                            }
-                            else{
-                                Materialize.toast('Error saving data...'+ response.msg, 4000, 'red darken-3');
-                            }
-                        });
+                        Materialize.toast('User Signed Out...at '+currentTime, 4000, 'green darken-2');
+                    
+                        populateTable();    
                     }
                     else {
                          Materialize.toast('Error...'+ response.msg, 4000, 'red darken-3');
@@ -396,50 +384,56 @@ function addUser(event) {
     // Check and make sure errorCount's still at zero
     if(errorCount === 0) {
 
-        // If it is, compile all user info into one object
-        var newUser = {
-            'username': $('#addUser fieldset input#inputUserName').val(),
-            'email': $('#addUser fieldset input#inputUserEmail').val(),
-            'fullname': $('#addUser fieldset input#inputUserFullname').val(),
-            'age': $('#addUser fieldset input#inputUserAge').val(),
-            'location': $('#addUser fieldset input#inputUserLocation').val(),
-            'gender': $('#addUser fieldset input#inputUserGender').val()
-        }
-
-        // Use AJAX to post the object to our adduser service
-        $.ajax({
-            type: 'POST',
-            data: newUser,
-            url: '/users/adduser',
-            dataType: 'JSON'
-
-        }).done(function( response, msg, status ) {
-            //alert('test');
-            // Check for successful (blank) response
-            //console.log(status.status);
-            if (status.status == 201) {
-
-                // Clear the form inputs
-                $('#addUser fieldset input').val('');
-
-                Materialize.toast('User Added...', 4000, 'green darken-2');
-                // Update the table
-                populateTable();
-
+        $.get( '/time/current-date-time', function( date ) {
+            
+            // If it is, compile all user info into one object
+            var newUser = {
+                'username': $('#addUser fieldset input#inputUserName').val(),
+                'email': $('#addUser fieldset input#inputUserEmail').val(),
+                'fullname': $('#addUser fieldset input#inputUserFullname').val(),
+                'age': $('#addUser fieldset input#inputUserAge').val(),
+                'location': $('#addUser fieldset input#inputUserLocation').val(),
+                'gender': $('#addUser fieldset input#inputUserGender').val(),
+                'sign_in_data':{'date':"", 'time_in':"", 'time_out':""},
+                'created_at': date,
+                'updated_at': date
             }
-            else {
 
-                // If something goes wrong, alert the error message that our service returned
-               // alert('Error: ' + response.msg);
-
-                Materialize.toast('Error...'+ response.msg, 4000, 'red darken-3');
-                //$('#addUser fieldset input').val('');
-
-
-                // Update the table
-                populateTable();
-
-            }
+            // Use AJAX to post the object to our adduser service
+            $.ajax({
+                type: 'POST',
+                data: newUser,
+                url: '/users/adduser',
+                dataType: 'JSON'
+    
+            }).done(function( response, msg, status ) {
+                //alert('test');
+                // Check for successful (blank) response
+                //console.log(status.status);
+                if (status.status == 201) {
+    
+                    // Clear the form inputs
+                    $('#addUser fieldset input').val('');
+    
+                    Materialize.toast('User Added...', 4000, 'green darken-2');
+                    // Update the table
+                    populateTable();
+    
+                }
+                else {
+    
+                    // If something goes wrong, alert the error message that our service returned
+                   // alert('Error: ' + response.msg);
+    
+                    Materialize.toast('Error...'+ response.msg, 4000, 'red darken-3');
+                    //$('#addUser fieldset input').val('');
+    
+    
+                    // Update the table
+                    populateTable();
+    
+                }
+            });
         });
     }
     else {
