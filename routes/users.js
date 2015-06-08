@@ -1,5 +1,5 @@
 var express = require('express');
-var ObjectID = require('mongodb').ObjectID
+var ObjectID = require('mongodb').ObjectID;
 var router = express.Router();
 
 /* GET users listing. */
@@ -18,8 +18,7 @@ router.get('/userlist', function(req, res) {
 router.get('/viewuser', function(req, res) {
     var db = req.db;
     var user = req.query.id;
-    //res.json(user);
-    //var query = '{"_id" : ObjectId("5567580810256268299df7ea")}';
+    
     db.collection('userlist').findOne({_id: ObjectID.createFromHexString(user)},function(err, result) {
     if (err) { res.status(400).send({msg: 'An error occured: '+err}) };
        res.json(result);
@@ -27,18 +26,15 @@ router.get('/viewuser', function(req, res) {
 });
 
 
-router.get('/viewuser/:id', function(req, res) {
+router.get('/viewbyage/:age', function(req, res) {
     var db = req.db;
     
-    var user = req.params.id;
-    var userage = req.query.age;
-    console.log(user);
-    console.log(userage);
-    //res.json(user);
-    //var query = '{"_id" : ObjectId("5567580810256268299df7ea")}';
-    db.collection('userlist').find({_id: ObjectID.createFromHexString(user), age: userage},function(err, result) {
-    if (err) { res.status(400).send({msg: 'An error occured: '+err}) };
-       res.json(result);
+    var userage = parseInt(req.params.age);
+    
+    db.collection('userlist').find({age: userage}).toArray(function(err, items) {
+        
+       res.json(items);
+    
     });
 });
 

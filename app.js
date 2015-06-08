@@ -4,9 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var swagger_node_express = require("swagger-node-express");
+var paramTypes = swagger_node_express.paramTypes;
+var errors = swagger_node_express.errors;
 
 var app = express();
+
 
 // Database------------------------------------------------->
 var config = {       "USER"    : "Gav",                  
@@ -82,9 +85,7 @@ app.use(function(err, req, res, next) {
 });
 
 /*
-
-// Couple the application to the Swagger module.
-var swagger = require("swagger-node-express").createNew(app);
+.createNew(app);
 //var userResources = require("./resources.js");
 
 var swe = swagger.errors;
@@ -168,14 +169,40 @@ swagger.addValidator(
   }
 );*/
 
-var models = require("./models.js");
-
+//var models = require("./models.js");
 
 
 //swagger.addModels(models).addGet(findById);
 
-//swagger.configure("http://localhost:3000", "0.1");
+var apiInfo = {
+            title: "Swagger Hellow Worls App",
+            description: "This is simple hello world",
+            termsOfServiceUrl: "http://localhost/terms/",
+            contact: "abc@name.com",
+            license: "Apache 2.0",
+            licenseUrl: "http://www.apache.org/licenses/LICENSE-2.0.html"
+          }
 
+var swagger = swagger_node_express.createNew(app)
+
+swagger.setApiInfo(apiInfo)
+swagger.configureSwaggerPaths("", "api-docs", "")
+swagger.configure("http://localhost:3000", "1.0.0");
+
+// Serve up swagger ui at /docs via static route
+var docs_handler = express.static(__dirname + '/node_modules/swagger-node-express/swagger-ui/');
+app.get(/^\/docs(\/.*)?$/, function(req, res, next) {
+  if (req.url === '/docs') { // express static barfs on root url w/o trailing slash
+    res.writeHead(302, { 'Location' : req.url + '/' });
+    res.end();
+    return;
+  }
+  // take off leading /docs so that connect locates file correctly
+  req.url = req.url.substr('/docs'.length);
+  return docs_handler(req, res, next);
+});
+
+app.swagger = swagger;
 module.exports = app;
 
 app.listen(3000); 
