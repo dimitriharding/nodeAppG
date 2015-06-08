@@ -15,32 +15,35 @@ block content
                     li(class="tab col s3 s6 l6")
                         a(href="#addUser")
                             h5 Add User
+                    li(class="tab col s3 s6 l6")
+                        a(href="#enterHours")
+                            h5 Enter Hours
         #view
-                // USER INFO
-                #userInfo(class='col s6 m6 lg6')
-                    div(class='card teal lighten-1')
-                        div(class='card-content white-text')
-                            #userInfoName(class='card-title') Name
-                                br
-                            p(style='text-align:center')
-                                span#userInfoAge Age
-                                br
-                                span#userInfoGender Gender
-                                br
-                                span#userInfoLocation Location
-                        div(class='card-action')
-                            a(id="editbutton" class='' style='cursor: pointer') Edit
-                // /USER INFO
+            // USER INFO
+            #userInfo(class='col s6 m6 lg6')
+                div(class='card teal lighten-1')
+                    div(class='card-content white-text')
+                        #userInfoName(class='card-title') Name
+                            br
+                        p(style='text-align:center')
+                            span#userInfoAge Age
+                            br
+                            span#userInfoGender Gender
+                            br
+                            span#userInfoLocation Location
+                    div(class='card-action')
+                        a(id="editbutton" class='' style='cursor: pointer') Edit
+            // /USER INFO
 
-                // USER LIST
-                #userList(class='col s6 m6 lg6')
-                    table(class='hoverable')
-                        thead
-                            th UserName
-                            th Email
-                            th Delete
-                        tbody
-                // /USER LIST
+            // USER LIST
+            #userList(class='col s6 m6 lg6')
+                table(class='hoverable')
+                    thead
+                        th UserName
+                        th Email
+                        th Delete
+                    tbody
+            // /USER LIST
         // ADD USER
         #addUser
             fieldset
@@ -64,12 +67,18 @@ block content
                 br
                 button#btnAddUser(class='btn green darken-1') Add User
         // /ADD USER
+        // ENTER HOURS
+        #enterHours
+            h5(style="display: inline") Current Time: 
+                #time(style="display: inline")
+            ul(class = 'collection')
+        // /ENTER HOURS
     // /WRAPPER
 
     div(class="fixed-action-btn" style="bottom: 45px; right: 24px;")
         a(class="btn-floating btn-large red")
             i(class="large mdi-navigation-expand-less")
-
+     
     // Modal Structure
     #modalEdit(class='modal modal-fixed-footer')
         div(class='modal-content')

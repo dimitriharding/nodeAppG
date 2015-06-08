@@ -5,10 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
+var app = express();
+
 // Database------------------------------------------------->
 var config = {       "USER"    : "Gav",                  
            "PASS"    : "pass",       
-           "HOST"    : "ec2-52-11-254-37.us-west-2.compute.amazonaws.com",         
+           "HOST"    : "52.11.254.37",         
            "PORT"    : "27017",        
            "DATABASE" : "nodeApp"     };
 
@@ -21,8 +24,8 @@ var db = mongo.db(dbPath, {native_parser:true});
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var time = require('./routes/time')
 
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,6 +47,7 @@ app.use(function(req,res,next){
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/time', time);
 
 
 // catch 404 and forward to error handler
@@ -76,6 +80,101 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+/*
+
+// Couple the application to the Swagger module.
+var swagger = require("swagger-node-express").createNew(app);
+//var userResources = require("./resources.js");
+
+var swe = swagger.errors;
+var params = swagger.paramTypes;
+
+var findById = {
+  'spec': {
+    description : "Find users by ID",  
+    path : "/users/viewuser?id={userId}",
+    method: "GET",
+    summary : "Find users by ID",
+    notes : "Returns a user based on ID",
+    type : "User",
+    nickname : "getUserById",
+    produces : ["application/json"],
+    parameters : [
+                  {
+                      "paramType":"query",
+                      "name":"userId",
+                      "type":"string",
+                      "required":true,
+                      "description":"The user's ID"
+                  }
+                ],
+    responseMessages : [swe.invalid('id'), swe.notFound('user')]
+  },
+  "get": {
+      "description": "Returns all pets from the system that the user has access to",
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of pets.",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/pet"
+            }
+          }
+        }
+      }
+    },
+  "action": function (req,res) {
+    if (!req.query.id) {
+      throw swe.invalid('id'); }
+    var id = parseInt(req.query.id);
+    var user = userData.getUserById(id);
+
+    if(user) res.send(JSON.stringify(user));
+    else throw swe.notFound('user', res);
+  }
+};
+
+swagger.setApiInfo({
+  title: "Timely App",
+  description: "This is a sample employee time tracker app. You can find out more about Swagger at <a href=\"http://swagger.wordnik.com\">http://swagger.wordnik.com</a> or on irc.freenode.net, #swagger.  For this sample, you can use the api key \"special-key\" to test the authorization filters",
+  termsOfServiceUrl: "http://helloreverb.com/terms/",
+  contact: "apiteam@wordnik.com",
+  license: "Apache 2.0",
+  licenseUrl: "http://www.apache.org/licenses/LICENSE-2.0.html"
+});
+// This is a sample validator.  It simply says that for _all_ POST, DELETE, PUT  methods, 
+// the header api_key OR query param api_key must be equal to the string literal 
+// special-key.  All other HTTP ops are A-OK 
+
+swagger.addValidator(
+  function validate(req, path, httpMethod) {
+    //  example, only allow POST for api_key="special-key"
+    if ("POST" == httpMethod || "DELETE" == httpMethod || "PUT" == httpMethod) {
+      var apiKey = req.headers["api_key"];
+      if (!apiKey) {
+        apiKey = url.parse(req.url,true).query["api_key"];
+      }
+      if ("special-key" == apiKey) {
+        return true; 
+      }
+      return false;
+    }
+    return true;
+  }
+);*/
+
+var models = require("./models.js");
+
+
+
+//swagger.addModels(models).addGet(findById);
+
+//swagger.configure("http://localhost:3000", "0.1");
 
 module.exports = app;
 
