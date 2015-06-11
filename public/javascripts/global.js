@@ -394,11 +394,8 @@ function addUser(event) {
                 'age': $('#addUser fieldset input#inputUserAge').val(),
                 'location': $('#addUser fieldset input#inputUserLocation').val(),
                 'gender': $('#addUser fieldset input#inputUserGender').val(),
-                'sign_in_data':{'date':"", 'time_in':"", 'time_out':""},
-                'created_at': date,
-                'updated_at': date
             }
-
+            
             // Use AJAX to post the object to our adduser service
             $.ajax({
                 type: 'POST',
@@ -423,7 +420,7 @@ function addUser(event) {
                 else {
     
                     // If something goes wrong, alert the error message that our service returned
-                   // alert('Error: ' + response.msg);
+                   console.log('Error: ' + response.msg);
     
                     Materialize.toast('Error...'+ response.msg, 4000, 'red darken-3');
                     //$('#addUser fieldset input').val('');
@@ -505,8 +502,7 @@ function editUser(event) {
             'fullname': $('#editUserFullname').val(),
             'age': $('#editUserAge').val(),
             'location': $('#editUserLocation').val(),
-            'gender': $('#editUserGender').val(),
-            'date': date
+            'gender': $('#editUserGender').val()
         }
             // If they did, do our edit
             $.ajax({

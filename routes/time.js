@@ -32,8 +32,14 @@ router.get('/current-time', function(req, res) {
 
 	//or we can pipe
 	request(returnUrl, function(err, response, body){
-		var obj = JSON.parse(body);
-		res.send(extractTime(obj));
+		if(!err){
+			var obj = JSON.parse(body);
+			res.status(200);
+			res.send(extractTime(obj));
+		}else{
+			res.status(400);
+		}
+		
 	});
 });
 

@@ -43,7 +43,26 @@ router.get('/viewbyage/:age', function(req, res) {
  */
 router.post('/adduser', function(req, res) {
     var db = req.db;
-    db.collection('userlist').insert(req.body, function(err, result){
+    
+    var sign_in = new Array();
+    sign_in.push( {date:"",time_in:"",time_out:"" } );  //initilize an array of objects for sing in data
+    
+    var user = req.body;
+    user["sign_in_data"] = sign_in; //add the sign in objec tto the user data
+                console.log
+    db.collection('userlist').insert({username: user.username,
+                                      email: user.email,
+                                      fullname: user.fullname,
+                                      age: user.age,
+                                      location: user.location,
+                                      gender: user.gender,
+                                      sign_in_data:[ {
+                                          date: user.sign_in_data[0].date,
+                                          time_in: user.sign_in_data[0].time_in,
+                                          time_out: user.sign_in_data[0].time_out
+                                      }],
+                                      created_at: new Date(),
+                                      updated_at: new Date() }, function(err, result){
         
         if(result){
             res.status(201).json(result);
@@ -68,7 +87,7 @@ router.put('/edituser', function(req, res) {
              age: req.body.age,
              location: req.body.location,
              gender: req.body.gender,
-             updated_at: req.body.date
+             updated_at: new Date()
             } 
         }, function(err, result){
     //console.log(result);
