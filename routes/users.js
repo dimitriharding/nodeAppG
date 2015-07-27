@@ -65,7 +65,7 @@ router.post('/adduser', function(req, res) {
                                       updated_at: new Date() }, function(err, result){
         
         if(result){
-            res.status(201).json(result);
+            res.status(201).json(result); 
         }
         else{
             res.status(400).send({msg : 'error' + err});
